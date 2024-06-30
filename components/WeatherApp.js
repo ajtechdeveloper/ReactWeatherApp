@@ -1,7 +1,6 @@
 import { CONFIG } from '../config';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Animated, FlatList } from 'react-native-web';
-import { Picker } from '@react-native-picker/picker';
 
 const CITIES = [
   "New York,US",
@@ -27,7 +26,7 @@ const CITIES = [
 ];
 
 const WeatherApp = () => {
-  const [selectedCity, setSelectedCity] = useState('');
+  const [city, setCity] = useState('');
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState('');
   const [isCelsius, setIsCelsius] = useState(true);
@@ -74,18 +73,12 @@ const WeatherApp = () => {
     <div style={styles.container}>
       <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
         <Text style={styles.title}>Weather App</Text>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedCity}
-            onValueChange={(itemValue) => setSelectedCity(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Select a city" value="" />
-            {CITIES.map((city, index) => (
-              <Picker.Item key={index} label={city} value={city} />
-            ))}
-          </Picker>
-        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter city name"
+          value={city}
+          onChangeText={setCity}
+        />
         <TouchableOpacity style={styles.button} onPress={fetchWeather}>
           <Text style={styles.buttonText}>Get Weather</Text>
         </TouchableOpacity>
