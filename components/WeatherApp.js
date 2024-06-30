@@ -41,10 +41,6 @@ const WeatherApp = () => {
   }, []);
 
   const fetchWeather = async () => {
-    if (!selectedCity) {
-      setError('Please select a city');
-      return;
-    }
     try {
       setError('');
       const response = await fetch(
