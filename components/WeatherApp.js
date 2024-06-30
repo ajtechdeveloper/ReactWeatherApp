@@ -1,6 +1,6 @@
 import { CONFIG } from '../config';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Animated, FlatList } from 'react-native-web';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Animated, FlatList } from 'react-native-web';
 
 const CITIES = [
   "New York,US",
