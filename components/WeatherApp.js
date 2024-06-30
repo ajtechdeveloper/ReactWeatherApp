@@ -70,45 +70,45 @@ const WeatherApp = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
-        <Text style={styles.title}>Weather App</Text>
+    <div style={style.container}>
+      <Animated.View style={[style.card, { opacity: fadeAnim }]}>
+        <Text style={style.title}>Weather App</Text>
         <TextInput
-          style={styles.input}
+          style={style.input}
           placeholder="Enter city name"
           value={city}
           onChangeText={setCity}
         />
         <div>
         </div>
-        <TouchableOpacity style={styles.button} onPress={fetchWeather}>
-          <Text style={styles.buttonText}>Get Weather</Text>
+        <TouchableOpacity style={style.button} onPress={fetchWeather}>
+          <Text style={style.buttonText}>Get Weather</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={toggleUnit}>
-          <Text style={styles.buttonText}>
+        <TouchableOpacity style={style.button} onPress={toggleUnit}>
+          <Text style={style.buttonText}>
             Toggle to {isCelsius ? 'Fahrenheit' : 'Celsius'}
           </Text>
         </TouchableOpacity>
         {error ? (
-          <Text style={styles.error}>{error}</Text>
+          <Text style={style.error}>{error}</Text>
         ) : weather ? (
-          <View style={styles.weatherInfo}>
-            <Text style={styles.weatherTitle}>{weather.name}</Text>
-            <Text style={styles.weatherText}>
+          <View style={style.weatherInfo}>
+            <Text style={style.weatherTitle}>{weather.name}</Text>
+            <Text style={style.weatherText}>
               Temperature: {convertTemp(weather.main.temp).toFixed(1)}°
               {isCelsius ? 'C' : 'F'}
             </Text>
-            <Text style={styles.weatherText}>
+            <Text style={style.weatherText}>
               Feels like: {convertTemp(weather.main.feels_like).toFixed(1)}°
               {isCelsius ? 'C' : 'F'}
             </Text>
-            <Text style={styles.weatherText}>
+            <Text style={style.weatherText}>
               Description: {weather.weather[0].description}
             </Text>
-            <Text style={styles.weatherText}>
+            <Text style={style.weatherText}>
               Humidity: {weather.main.humidity}%
             </Text>
-            <Text style={styles.weatherText}>
+            <Text style={style.weatherText}>
               Wind Speed: {weather.wind.speed} m/s
             </Text>
           </View>
@@ -118,7 +118,7 @@ const WeatherApp = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: 'center',
