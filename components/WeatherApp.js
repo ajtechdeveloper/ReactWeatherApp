@@ -79,6 +79,8 @@ const WeatherApp = () => {
           value={city}
           onChangeText={setCity}
         />
+        <div>
+        </div>
         <TouchableOpacity style={styles.button} onPress={fetchWeather}>
           <Text style={styles.buttonText}>Get Weather</Text>
         </TouchableOpacity>
