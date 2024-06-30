@@ -1,6 +1,6 @@
 import { CONFIG } from '../config';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Animated, FlatList } from 'react-native-web';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated } from 'react-native-web';
 
 const CITIES = [
   "New York,US",
@@ -70,57 +70,55 @@ const WeatherApp = () => {
   };
 
   return (
-    <div style={style.container}>
-      <Animated.View style={[style.card, { opacity: fadeAnim }]}>
-        <Text style={style.title}>Weather App</Text>
+    <View style={styles.container}>
+      <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+        <Text style={styles.title}>Weather App</Text>
         <TextInput
-          style={style.input}
+          style={styles.input}
           placeholder="Enter city name"
           value={city}
           onChangeText={setCity}
         />
-        <div>
-        </div>
-        <TouchableOpacity style={style.button} onPress={fetchWeather}>
-          <Text style={style.buttonText}>Get Weather</Text>
+        <TouchableOpacity style={styles.button} onPress={fetchWeather}>
+          <Text style={styles.buttonText}>Get Weather</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={style.button} onPress={toggleUnit}>
-          <Text style={style.buttonText}>
+        <TouchableOpacity style={styles.button} onPress={toggleUnit}>
+          <Text style={styles.buttonText}>
             Toggle to {isCelsius ? 'Fahrenheit' : 'Celsius'}
           </Text>
         </TouchableOpacity>
         {error ? (
-          <Text style={style.error}>{error}</Text>
+          <Text style={styles.error}>{error}</Text>
         ) : weather ? (
-          <View style={style.weatherInfo}>
-            <Text style={style.weatherTitle}>{weather.name}</Text>
-            <Text style={style.weatherText}>
+          <View style={styles.weatherInfo}>
+            <Text style={styles.weatherTitle}>{weather.name}</Text>
+            <Text style={styles.weatherText}>
               Temperature: {convertTemp(weather.main.temp).toFixed(1)}°
               {isCelsius ? 'C' : 'F'}
             </Text>
-            <Text style={style.weatherText}>
+            <Text style={styles.weatherText}>
               Feels like: {convertTemp(weather.main.feels_like).toFixed(1)}°
               {isCelsius ? 'C' : 'F'}
             </Text>
-            <Text style={style.weatherText}>
+            <Text style={styles.weatherText}>
               Description: {weather.weather[0].description}
             </Text>
-            <Text style={style.weatherText}>
+            <Text style={styles.weatherText}>
               Humidity: {weather.main.humidity}%
             </Text>
-            <Text style={style.weatherText}>
+            <Text style={styles.weatherText}>
               Wind Speed: {weather.wind.speed} m/s
             </Text>
           </View>
         ) : null}
       </Animated.View>
-    </div>
+    </View>
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -144,16 +142,12 @@ const style = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  pickerContainer: {
+  input: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 10,
+    padding: 10,
     marginBottom: 10,
-    overflow: 'hidden',
-  },
-  picker: {
-    height: 50,
-    width: '100%',
   },
   button: {
     backgroundColor: '#007AFF',
