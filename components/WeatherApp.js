@@ -47936,68 +47936,68 @@ const WeatherApp = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
-        <Text style={styles.title}>Weather App</Text>
-        <View style={styles.autocompleteContainer}>
-          <input
-            style={styles.input}
-            placeholder="Enter city name"
-            value={city}
-            onChange={(e) => handleInputChange(e.target.value)}
-            onFocus={() => setShowAutocomplete(true)}
-            onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+  <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+    <Text style={styles.title}>Weather App</Text>
+    <View style={styles.autocompleteContainer}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter city name"
+        value={city}
+        onChangeText={handleInputChange}
+        onFocus={() => setShowAutocomplete(true)}
+        onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+      />
+      {showAutocomplete && (
+        <View style={styles.autocompleteListContainer}>
+          <FlatList
+            data={filteredCities}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.autocompleteItem}
+                onPress={() => handleSelectCity(item)}>
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item}
+            style={styles.autocompleteList}
           />
-          {showAutocomplete && (
-            <View style={styles.autocompleteListContainer}>
-              <FlatList
-                data={filteredCities}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.autocompleteItem}
-                    onPress={() => handleSelectCity(item)}>
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item}
-                style={styles.autocompleteList}
-              />
-            </View>
-          )}
         </View>
-        <TouchableOpacity style={styles.button} onPress={fetchWeather}>
-          <Text style={styles.buttonText}>Get Weather</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={toggleUnit}>
-          <Text style={styles.buttonText}>
-            Toggle to {isCelsius ? 'Fahrenheit' : 'Celsius'}
-          </Text>
-        </TouchableOpacity>
-        {error ? (
-          <Text style={styles.error}>{error}</Text>
-        ) : weather ? (
-          <View style={styles.weatherInfo}>
-            <Text style={styles.weatherTitle}>{weather.name}</Text>
-            <Text style={styles.weatherText}>
-              Temperature: {convertTemp(weather.main.temp).toFixed(1)}°
-              {isCelsius ? 'C' : 'F'}
-            </Text>
-            <Text style={styles.weatherText}>
-              Feels like: {convertTemp(weather.main.feels_like).toFixed(1)}°
-              {isCelsius ? 'C' : 'F'}
-            </Text>
-            <Text style={styles.weatherText}>
-              Description: {weather.weather[0].description}
-            </Text>
-            <Text style={styles.weatherText}>
-              Humidity: {weather.main.humidity}%
-            </Text>
-            <Text style={styles.weatherText}>
-              Wind Speed: {weather.wind.speed} m/s
-            </Text>
-          </View>
-        ) : null}
-      </Animated.View>
+      )}
     </View>
+    <TouchableOpacity style={styles.button} onPress={fetchWeather}>
+      <Text style={styles.buttonText}>Get Weather</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.button} onPress={toggleUnit}>
+      <Text style={styles.buttonText}>
+        Toggle to {isCelsius ? 'Fahrenheit' : 'Celsius'}
+      </Text>
+    </TouchableOpacity>
+    {error ? (
+      <Text style={styles.error}>{error}</Text>
+    ) : weather ? (
+      <View style={styles.weatherInfo}>
+        <Text style={styles.weatherTitle}>{weather.name}</Text>
+        <Text style={styles.weatherText}>
+          Temperature: {convertTemp(weather.main.temp).toFixed(1)}°
+          {isCelsius ? 'C' : 'F'}
+        </Text>
+        <Text style={styles.weatherText}>
+          Feels like: {convertTemp(weather.main.feels_like).toFixed(1)}°
+          {isCelsius ? 'C' : 'F'}
+        </Text>
+        <Text style={styles.weatherText}>
+          Description: {weather.weather[0].description}
+        </Text>
+        <Text style={styles.weatherText}>
+          Humidity: {weather.main.humidity}%
+        </Text>
+        <Text style={styles.weatherText}>
+          Wind Speed: {weather.wind.speed} m/s
+        </Text>
+      </View>
+    ) : null}
+  </Animated.View>
+</View>
   );
 };
 
