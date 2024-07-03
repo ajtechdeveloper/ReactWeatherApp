@@ -47913,6 +47913,7 @@ const WeatherApp = () => {
   const fetchWeather = async () => {
     try {
       setError('');
+      setForecast(null);
       const response = await fetch(
         `${CONFIG.BASE_URL}/weather?q=${city}&appid=${CONFIG.API_KEY}&units=metric`
       );
@@ -47923,6 +47924,7 @@ const WeatherApp = () => {
       setWeather(data);
     } catch (err) {
       setError(err.message);
+      setWeather(null);
     }
   };
 
@@ -47939,6 +47941,7 @@ const WeatherApp = () => {
       setForecast(data);
     } catch (err) {
       setError(err.message);
+      setForecast(null);
     }
   };
 
