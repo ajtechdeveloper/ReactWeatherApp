@@ -1,6 +1,6 @@
 import { CONFIG } from '../config';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, FlatList } from 'react-native-web';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, FlatList, ScrollView } from 'react-native-web';
 
 const CITIES = [
   "Tokyo",
@@ -47877,6 +47877,7 @@ const WeatherApp = () => {
   const [city, setCity] = useState('');
   const [filteredCities, setFilteredCities] = useState([]);
   const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState(null);
   const [error, setError] = useState('');
   const [isCelsius, setIsCelsius] = useState(true);
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -47925,6 +47926,22 @@ const WeatherApp = () => {
     }
   };
 
+  const fetchForecast = async () => {
+    try {
+      setError('');
+      const response = await fetch(
+        `${CONFIG.BASE_URL}/forecast?q=${city}&appid=${CONFIG.API_KEY}&units=metric`
+      );
+      if (!response.ok) {
+        throw new Error('Forecast not found');
+      }
+      const data = await response.json();
+      setForecast(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const toggleUnit = () => {
     setIsCelsius(!isCelsius);
   };
@@ -47935,69 +47952,91 @@ const WeatherApp = () => {
   };
 
   return (
-    <View style={styles.container}>
-  <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
-    <Text style={styles.title}>Weather App</Text>
-    <View style={styles.autocompleteContainer}>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter city name"
-        value={city}
-        onChangeText={handleInputChange}
-        onFocus={() => setShowAutocomplete(true)}
-        onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
-      />
-      {showAutocomplete && (
-        <View style={styles.autocompleteListContainer}>
-          <FlatList
-            data={filteredCities}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.autocompleteItem}
-                onPress={() => handleSelectCity(item)}>
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item) => item}
-            style={styles.autocompleteList}
+    <ScrollView contentContainerStyle={styles.container}>
+      <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+        <Text style={styles.title}>Weather App</Text>
+        <View style={styles.autocompleteContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter city name"
+            value={city}
+            onChangeText={handleInputChange}
+            onFocus={() => setShowAutocomplete(true)}
+            onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
           />
+          {showAutocomplete && (
+            <View style={styles.autocompleteListContainer}>
+              <FlatList
+                data={filteredCities}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.autocompleteItem}
+                    onPress={() => handleSelectCity(item)}>
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item}
+                style={styles.autocompleteList}
+              />
+            </View>
+          )}
         </View>
-      )}
-    </View>
-    <TouchableOpacity style={styles.button} onPress={fetchWeather}>
-      <Text style={styles.buttonText}>Get Weather</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.button} onPress={toggleUnit}>
-      <Text style={styles.buttonText}>
-        Toggle to {isCelsius ? 'Fahrenheit' : 'Celsius'}
-      </Text>
-    </TouchableOpacity>
-    {error ? (
-      <Text style={styles.error}>{error}</Text>
-    ) : weather ? (
-      <View style={styles.weatherInfo}>
-        <Text style={styles.weatherTitle}>{weather.name}</Text>
-        <Text style={styles.weatherText}>
-          Temperature: {convertTemp(weather.main.temp).toFixed(1)}°
-          {isCelsius ? 'C' : 'F'}
-        </Text>
-        <Text style={styles.weatherText}>
-          Feels like: {convertTemp(weather.main.feels_like).toFixed(1)}°
-          {isCelsius ? 'C' : 'F'}
-        </Text>
-        <Text style={styles.weatherText}>
-          Description: {weather.weather[0].description}
-        </Text>
-        <Text style={styles.weatherText}>
-          Humidity: {weather.main.humidity}%
-        </Text>
-        <Text style={styles.weatherText}>
-          Wind Speed: {weather.wind.speed} m/s
-        </Text>
-      </View>
-    ) : null}
-  </Animated.View>
-</View>
+        <TouchableOpacity style={styles.button} onPress={fetchWeather}>
+          <Text style={styles.buttonText}>Get Weather</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={toggleUnit}>
+          <Text style={styles.buttonText}>
+            Toggle to {isCelsius ? 'Fahrenheit' : 'Celsius'}
+          </Text>
+        </TouchableOpacity>
+        {error ? (
+          <Text style={styles.error}>{error}</Text>
+        ) : weather ? (
+          <View style={styles.weatherInfo}>
+            <Text style={styles.weatherTitle}>{weather.name}</Text>
+            <Text style={styles.weatherText}>
+              Temperature: {convertTemp(weather.main.temp).toFixed(1)}°
+              {isCelsius ? 'C' : 'F'}
+            </Text>
+            <Text style={styles.weatherText}>
+              Feels like: {convertTemp(weather.main.feels_like).toFixed(1)}°
+              {isCelsius ? 'C' : 'F'}
+            </Text>
+            <Text style={styles.weatherText}>
+              Description: {weather.weather[0].description}
+            </Text>
+            <Text style={styles.weatherText}>
+              Humidity: {weather.main.humidity}%
+            </Text>
+            <Text style={styles.weatherText}>
+              Wind Speed: {weather.wind.speed} m/s
+            </Text>
+            <TouchableOpacity style={styles.button} onPress={fetchForecast}>
+              <Text style={styles.buttonText}>Get 5 Day Forecast</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        {forecast && (
+          <View style={styles.forecastInfo}>
+            <Text style={styles.weatherTitle}>5 Day Forecast</Text>
+            {forecast.list.filter((item, index) => index % 8 === 0).map((item, index) => (
+              <View key={index} style={styles.forecastDay}>
+                <Text style={styles.forecastDate}>
+                  {new Date(item.dt * 1000).toLocaleDateString()}
+                </Text>
+                <Text style={styles.weatherText}>
+                  Temp: {convertTemp(item.main.temp).toFixed(1)}°
+                  {isCelsius ? 'C' : 'F'}
+                </Text>
+                <Text style={styles.weatherText}>
+                  Description: {item.weather[0].description}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </Animated.View>
+    </ScrollView>
   );
 };
 
@@ -48084,6 +48123,20 @@ const styles = StyleSheet.create({
   },
   weatherText: {
     fontSize: 16,
+    marginBottom: 5,
+  },
+  forecastInfo: {
+    marginTop: 20,
+  },
+  forecastDay: {
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    paddingBottom: 10,
+  },
+  forecastDate: {
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 5,
   },
 });
