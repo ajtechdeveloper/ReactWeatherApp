@@ -48028,7 +48028,7 @@ const WeatherApp = () => {
                   {new Date(item.dt * 1000).toLocaleDateString()}
                 </Text>
                 <Text style={styles.weatherText}>
-                  Temp: {convertTemp(item.main.temp).toFixed(1)}°
+                  Temperature: {convertTemp(item.main.temp).toFixed(1)}°
                   {isCelsius ? 'C' : 'F'}
                 </Text>
                 <Text style={styles.weatherText}>
