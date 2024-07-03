@@ -47914,7 +47914,7 @@ const WeatherApp = () => {
     try {
       setError('');
       const response = await fetch(
-        `${CONFIG.BASE_URL}?q=${city}&appid=${CONFIG.API_KEY}&units=metric`
+        `${CONFIG.BASE_URL}/weather?q=${city}&appid=${CONFIG.API_KEY}&units=metric`
       );
       if (!response.ok) {
         throw new Error('City not found');
