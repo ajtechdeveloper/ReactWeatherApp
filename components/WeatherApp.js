@@ -48025,7 +48025,11 @@ const WeatherApp = () => {
             {forecast.list.filter((item, index) => index % 8 === 0).map((item, index) => (
               <View key={index} style={styles.forecastDay}>
                 <Text style={styles.forecastDate}>
-                  {new Date(item.dt * 1000).toLocaleDateString()}
+                  {new Date(item.dt * 1000).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
                 </Text>
                 <Text style={styles.weatherText}>
                   Temperature: {convertTemp(item.main.temp).toFixed(1)}°
